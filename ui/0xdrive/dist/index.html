@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>X0G Drive</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar-fixed">
+    <nav class="nav-extended white">
+      <div class="nav-wrapper white">
+        <ul>
+          <li><a href="#!" class="title grey-text text-darken-1">X0G Drive</a></li>
+        </ul>
+        <div class="search-wrapper">
+          <i class="material-icons">Search</i>
+          <input type="search" name="Search" placeholder="Search Drive" />
+        </div>
+      </div>
+      <div class="nav-wrapper nav-2">
+        <ul>
+          <!-- New Button with Upload Functionality -->
+          <li>
+            <a id="newButton" class="waves-effect waves-light btn btn-flat white-text">New</a>
+            <input type="file" id="fileInput" style="display: none;" />
+          </li>
+        </ul>
+        <ul class="right">
+          <li><a href="#!"><i class="material-icons grey-text text-darken-1">view_list</i></a></li>
+          <li><a href="#!"><i class="material-icons grey-text text-darken-1">info</i></a></li>
+          <li><a href="#!"><i class="material-icons grey-text text-darken-1">settings</i></a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Sidebar -->
+  <ul class="side-nav fixed floating transparent z-depth-0">
+    <li class="active"><a href="#"><i class="material-icons blue-text text-darken-1">dashboard</i>My Drive</a></li>
+    <li><a href="#"><i class="material-icons">devices</i>Computers</a></li>
+    <li><a href="#"><i class="material-icons">people</i>Shared with me</a></li>
+    <li><a href="#"><i class="material-icons">access_time</i>Recent</a></li>
+    <li><a href="#"><i class="material-icons">camera</i>NFT Gallery</a></li>
+    <li><a href="#"><i class="material-icons">star</i>Starred</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="#"><i class="material-icons">cloud</i>Backups</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="#"><i class="material-icons">storage</i>Upgrade storage</a></li>
+  </ul>
+
+  <!-- Main Content -->
+  <div class="main">
+    <div class="container-fluid">
+      <p class="subheader">Folders</p>
+      <div class="card-panel folder"><i class="material-icons left">folder</i> Folder 1</div>
+      <div class="card-panel folder"><i class="material-icons left">folder</i> Folder 2</div>
+    </div>
+  </div>
+
+  <!-- Script Imports -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+  <script>
+    // Trigger file input when "New" button is clicked
+    document.getElementById('newButton').addEventListener('click', () => {
+      document.getElementById('fileInput').click();
+    });
+
+    // File input change event handler
+    document.getElementById('fileInput').addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        // Upload the file to the localhost server
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+
+          const response = await fetch('http://localhost:8080/upload', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            alert(`File uploaded successfully: ${result.filename}`);
+            // Optionally, refresh the file list
+          } else {
+            throw new Error('Upload failed');
+          }
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          alert('File upload failed. Please try again.');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
